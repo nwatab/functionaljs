@@ -1,10 +1,9 @@
-
-type Pattern<T, R> = {
+export type Pattern<T, R> = {
   empty: () => R,
   cons: (value: T, list: Data<T>) => R
 }
 
-type Data<T> = <R>(pattern: Pattern<T, R>) => R;
+export type Data<T> = <R>(pattern: Pattern<T, R>) => R;
 
 export const empty = <T>(): Data<T> => {
   return <R>(pattern: Pattern<T, R>) => {
