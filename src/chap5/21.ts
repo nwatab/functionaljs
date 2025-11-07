@@ -1,17 +1,17 @@
-import { cons, Data, empty, match } from './12';
+import { cons, List, empty, match } from './12';
 
 export const map = <T, R>(
-  alist: Data<T>,
+  alist: List<T>,
   transform: (value: T) => R
-): Data<R> => {
+): List<R> => {
   return match(alist, {
     empty: () => empty(),
     cons: (head, tail) => cons(transform(head), map(tail, transform)),
   });
 };
 
-export const toArray = <T>(alist: Data<T>): T[] => {
-  const toArrayHelper = <T>(alist: Data<T>, accumulator: T[]): T[] =>
+export const toArray = <T>(alist: List<T>): T[] => {
+  const toArrayHelper = <T>(alist: List<T>, accumulator: T[]): T[] =>
     match(alist, {
       empty: () => accumulator,
       cons: (head, tail) => toArrayHelper(tail, accumulator.concat(head)),
