@@ -1,12 +1,8 @@
 import expect from 'expect.js';
-import { list, stream } from './14';
+import { list, stream, enumFrom } from './14';
 import type { Stream } from './14';
 
 describe('サンクで無限を表現する', () => {
-  const enumFrom = (n: number): Stream<number> => {
-    return stream.cons(n, () => enumFrom(n + 1));
-  };
-
   it('ストリーム型のテスト', () => {
     var theStream = stream.cons(1, () => {
       return stream.cons(2, () => {

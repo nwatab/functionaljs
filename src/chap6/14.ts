@@ -70,3 +70,7 @@ export const list: ListOps = {
     return toArrayHelper(aList, []);
   },
 };
+
+export const enumFrom = (n: number): Stream<number> => {
+  return stream.cons(n, () => enumFrom(n + 1));
+};

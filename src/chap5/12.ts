@@ -35,9 +35,9 @@ export const head = <T>(alist: List<T>): T | null => {
   });
 };
 
-export const tail = <T>(alist: List<T>): List<T> | null => {
+export const tail = <T>(alist: List<T>): List<T> => {
   return match(alist, {
-    empty: () => null,
+    empty: () => empty(), // 書籍では null を返しているが、型の整合性のため empty() に変更
     cons: (head, tail) => tail,
   });
 };
