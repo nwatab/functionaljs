@@ -1,3 +1,5 @@
+import { List, Pattern } from '../chap5/12';
+
 type LazyPattern<T, R> = {
   empty(): R;
   cons(head: T, tailThunk: () => Stream<T>): R;
@@ -37,11 +39,6 @@ export const stream: StreamOps = {
     }),
 };
 
-type Pattern<T, R> = {
-  empty: () => R;
-  cons: (value: T, tail: List<T>) => R;
-};
-type List<T> = <R>(pattern: Pattern<T, R>) => R;
 type ListOps = {
   match<T, R>(aList: List<T>, pattern: Pattern<T, R>): R;
   empty<T>(): List<T>;
