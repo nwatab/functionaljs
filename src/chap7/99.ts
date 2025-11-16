@@ -1,8 +1,8 @@
 const fs = require('fs');
 
-type IO<A> = () => A;
+export type IO<A> = () => A;
 
-export const IO = {
+export const IOOps = {
   unit:
     <A>(v: A): IO<A> =>
     () =>
@@ -11,24 +11,24 @@ export const IO = {
     <A, B>(instanceA: IO<A>) =>
     (actionAB: (a: A) => IO<B>): IO<B> =>
     () =>
-      IO.run(actionAB(IO.run(instanceA))),
-  done: <A>(v: A): IO<void> => IO.unit(undefined),
+      IOOps.run(actionAB(IOOps.run(instanceA))),
+  done: <A>(v: A): IO<void> => IOOps.unit(undefined),
   run: <A>(instance: IO<A>): A => instance(),
   readFile:
     (path: string): IO<IO<string>> =>
     () =>
-      IO.unit(fs.readFileSync(path, 'utf8')),
+      IOOps.unit(fs.readFileSync(path, 'utf8')),
   println:
     (message: string): IO<null> =>
     () => {
       console.log(message);
-      return IO.unit(null)();
+      return IOOps.unit(null)();
     },
   writeFile:
     (path: string) =>
     (content: string): IO<null> =>
     () => {
       fs.writeFileSync(path, content);
-      return IO.unit(null)();
+      return IOOps.unit(null)();
     },
 };
