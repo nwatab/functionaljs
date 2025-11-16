@@ -1,26 +1,27 @@
 import { List } from '../chap5/12';
-import { list } from '../chap6/14';
-
-export const listFoldr = {
-  ...list,
-  append:
-    <T>(xs: List<T>) =>
-    (ys: List<T>): List<T> =>
-      listFoldr.match(xs, {
-        empty: () => ys,
-        cons: (head, tail) => list.cons(head, listFoldr.append(tail)(ys)),
-      }),
-};
+import { list as baseList } from '../chap6/14';
 
 export const foldr =
   <Item>(alist: List<Item>) =>
   <Result>(accumulator: Result) =>
   (callback: (item: Item) => (acc: Result) => Result) =>
-    listFoldr.match(alist, {
+    list.match(alist, {
       empty: () => accumulator,
       cons: (head: Item, tail: List<Item>): Result =>
         callback(head)(foldr(tail)(accumulator)(callback)),
     });
+
+export const list = {
+  ...baseList,
+  foldr,
+  append:
+    <T>(xs: List<T>) =>
+    (ys: List<T>): List<T> =>
+      list.match(xs, {
+        empty: () => ys,
+        cons: (head, tail) => baseList.cons(head, list.append(tail)(ys)),
+      }),
+};
 
 export const sum = (alist: List<number>) =>
   foldr(alist)(0)((item) => (accumulator) => accumulator + item);
@@ -40,7 +41,7 @@ export const any = (alist: List<boolean>) =>
 export const reverse = <T>(alist: List<T>) =>
   foldr(alist)(list.empty())(
     (item) => (accumulator) =>
-      listFoldr.append(accumulator)(list.cons(item, list.empty()))
+      list.append(accumulator)(list.cons(item, list.empty()))
   );
 
 export const find =
