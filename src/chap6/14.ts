@@ -1,4 +1,5 @@
-import { List, Pattern } from '../chap5/12';
+import { cons, empty, match } from '../chap5/12';
+import type { List, Pattern } from '../chap5/12';
 
 type LazyPattern<T, R> = {
   empty(): R;
@@ -47,15 +48,9 @@ type ListOps = {
 };
 
 export const list: ListOps = {
-  match: <T, R>(aList: List<T>, pattern: Pattern<T, R>): R => aList(pattern),
-  empty:
-    <T>(): List<T> =>
-    <R>(pattern: Pattern<T, R>) =>
-      pattern.empty(),
-  cons:
-    <T>(value: T, tail: List<T>): List<T> =>
-    <R>(pattern: Pattern<T, R>) =>
-      pattern.cons(value, tail),
+  match,
+  empty,
+  cons,
   toArray: <T>(aList: List<T>): T[] => {
     const toArrayHelper = (alist: List<T>, accumulator: T[]): T[] => {
       return list.match(alist, {
