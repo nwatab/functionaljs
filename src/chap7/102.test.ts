@@ -6,6 +6,6 @@ describe('string module', () => {
     expect(stringOps.head('abc')).to.eql('a');
   });
   it('tail', () => {
-    expect(stringOps.tail('abc')).to.eql('c');
+    expect(stringOps.tail('abc')).to.eql('bc');
   });
 });

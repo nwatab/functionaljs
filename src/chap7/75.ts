@@ -7,21 +7,16 @@ type ContinuesOnSuccess<T> = (
 ) => T | null;
 type ContinuesOnFailure<T> = () => T | null;
 
-export type Exp<T> = <R>(pattern: {
+export type Pattern<T, R> = {
   num: (n: T) => R;
   add: (exp1: Exp<T>, exp2: Exp<T>) => R;
   amb: (choices: List<Exp<T>>) => R;
-}) => R;
+};
+
+export type Exp<T> = <R>(pattern: Pattern<T, R>) => R;
 
 type ExpOps = {
-  match: <T, R>(
-    anExp: Exp<T>,
-    pattern: {
-      num: (n: T) => R;
-      add: (exp1: Exp<T>, exp2: Exp<T>) => R;
-      amb: (choices: List<Exp<T>>) => R;
-    }
-  ) => R;
+  match: <T, R>(anExp: Exp<T>, pattern: Pattern<T, R>) => R;
   num: <T>(n: T) => Exp<T>;
   add: <T>(exp1: Exp<T>, exp2: Exp<T>) => Exp<T>;
   amb: <T>(alist: List<Exp<T>>) => Exp<T>;
