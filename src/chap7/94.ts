@@ -4,27 +4,26 @@ type Pair<A, B> = <R>(pattern: { cons: (left: A, right: B) => R }) => R;
 
 type IOAction<A> = (world: World) => Pair<A, World>;
 
-const match = <A, B, R>(
-  data: Pair<A, B>,
-  pattern: { cons: (left: A, right: B) => R }
-): R => data(pattern);
-
-const pair = {
+export const pair = {
+  match: <A, B, R>(
+    data: Pair<A, B>,
+    pattern: { cons: (left: A, right: B) => R }
+  ): R => data(pattern),
   cons:
     <A, B>(left: A, right: B): Pair<A, B> =>
     (pattern) =>
       pattern.cons(left, right),
   right: <A, B>(tuple: Pair<A, B>): B =>
-    match(tuple, {
+    pair.match(tuple, {
       cons: (left, right) => right,
     }),
   left: <A, B>(tuple: Pair<A, B>): A =>
-    match(tuple, {
+    pair.match(tuple, {
       cons: (left, right) => left,
     }),
 };
 
-const IO = {
+export const IO = {
   unit:
     <A>(value: A): IOAction<A> =>
     (world) =>
@@ -33,7 +32,7 @@ const IO = {
     <A, B>(instanceA: IOAction<A>) =>
     (actionAB: (value: A) => IOAction<B>): IOAction<B> =>
     (world) =>
-      match(instanceA(world), {
+      pair.match(instanceA(world), {
         cons: (value, newWorld) => actionAB(value)(newWorld),
       }),
   done: () => IO.unit(null),
@@ -48,5 +47,3 @@ const IO = {
       return IO.unit(null)(world);
     },
 };
-
-export { IO };

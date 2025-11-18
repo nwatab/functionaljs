@@ -11,8 +11,8 @@ export const evaluate = (anExp: Exp<any>, environment: Environment): any =>
         variable: (name: string) =>
           ID.unit((actualArg: any) =>
             evaluate(body, env.extend(name, actualArg, environment))
-          ) as any,
-      }),
+          ),
+      } as any),
     app: (lambda, arg) =>
       ID.flatMap(evaluate(lambda, environment))((closure: any) =>
         ID.flatMap(evaluate(arg, environment))((actualArg: any) =>
